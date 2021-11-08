@@ -10,10 +10,6 @@ def hello_world():  # put application's code here
 def test():
     return 'test!'
 
-@app.route('/casey')
-def casey():
-    return 'gg bax'
-
 if __name__ == '__main__':
     app.run()
 
