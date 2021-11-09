@@ -16,7 +16,9 @@ PROBLEM = [
     [0, 4, 0, 0, 0, 7, 6, 0, 0],
     [5, 0, 7, 6, 0, 0, 0, 0, 3],
 ]
-#problem = [([0]* 9)*9]
+
+
+# problem = [([0]* 9)*9]
 
 
 def get_cost(matrix):
@@ -84,6 +86,7 @@ def set_initial_values(matrix):
             set_values(width, height, remove_values(width, height))
 
 
+# deprecated. Worse way to do case generation
 def get_new_matrix(matrix, initial):
     try_matrix = dc(matrix)
 
@@ -97,38 +100,70 @@ def get_new_matrix(matrix, initial):
     return try_matrix
 
 
+def switch_element(matrix, initial):
+    try_matrix = dc(matrix)
+    box_x = random.randint(0, 2)
+    box_y = random.randint(0, 2)
+    while (True):
+        first_x = 3 * box_x + random.randint(0, 2)
+        first_y = 3 * box_y + random.randint(0, 2)
+        second_x = 3 * box_x + random.randint(0, 2)
+        second_y = 3 * box_y + random.randint(0, 2)
+
+        if initial[first_x][first_y] == 0 and initial[second_x][second_y] == 0:
+            store_first = try_matrix[first_x][first_y]
+            try_matrix[first_x][first_y] = try_matrix[second_x][second_y]
+            try_matrix[second_x][second_y] = store_first
+            break
+        else:
+            continue
+
+    return try_matrix
+
+
 def run_annealing(matrix):
     initial = dc(matrix)
     set_initial_values(matrix)
     temperature = 4.2
+    stuck = 0
 
     while True:
-        try_case = get_new_matrix(matrix, initial)
+        if stuck > 5000:
+            temperature = 0.5
+
+        try_case = switch_element(matrix, initial)
         try_cost = get_cost(try_case)
         curr_cost = get_cost(matrix)
 
         delta_cost = try_cost - curr_cost
-        if delta_cost < 0:
+
+        if delta_cost <= 0:
+            if delta_cost == 0:
+                stuck += 1
+            else:
+                stuck = 0
             print(try_cost)
             matrix = try_case
             if try_cost == 0:
                 return matrix
-            temperature *= 0.99
+            temperature *= 0.999
         else:
             chance = 1 / (1 + np.exp(delta_cost / temperature))
-            #print(f"chance: {chance} temperature: {temperature}")
+
             if random.random() < chance:
+                if delta_cost == 0:
+                    stuck += 1
+                else:
+                    stuck = 0
+
                 print(try_cost)
                 matrix = try_case
                 if try_cost == 0:
                     return matrix
+                temperature *= 0.999
+            else:
+                stuck += 1
 
-                temperature *= 0.99
-
-
-start_time = time.time()
-print(run_annealing(dc(PROBLEM)))
-print(time.time()-start_time)
 
 def get_std(matrix):
     cost_list = []
@@ -139,3 +174,23 @@ def get_std(matrix):
 
     return np.std(cost_list)
 
+
+def print_board(matrix):
+    rows_list = []
+    for i in range(len(matrix)):
+        rows_list.append(matrix[i])
+
+    for row in rows_list:
+        row.insert(3, '|')
+        row.insert(7, '|')
+    for i in range(len(rows_list)):
+        if i == 3:
+            print("-------------------------------------")
+        if i == 6:
+            print("-------------------------------------")
+        print(rows_list[i])
+
+
+start_time = time.time()
+print_board(run_annealing(dc(PROBLEM)))
+print(time.time() - start_time)
