@@ -79,22 +79,16 @@ def set_initial_values(matrix):
         for height in range(3):
             set_values(width, height, remove_values(width, height))
 
-def get_new_matrix(matrix):
+
+def get_new_matrix(matrix, initial):
     try_matrix = matrix.copy()
+
     box_x = random.randint(0, 2)
     box_y = random.randint(0, 2)
     for i in range(3):
         for j in range(3):
+            try_matrix[3 * box_x + i][3 * box_y + j] = initial[3 * box_x + i][3 * box_y + j]
 
-            try_matrix[3 * box_x + i][3 * box_y + j] = PROBLEM[3 * box_x + i][3 * box_y + j]
     set_initial_values(try_matrix)
     return try_matrix
 
-def run_try(matrix):
-    set_initial_values(matrix)
-
-    print( PROBLEM)
-
-
-matrix = PROBLEM.copy()
-run_try(matrix)
