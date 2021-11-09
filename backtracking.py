@@ -4,7 +4,7 @@
 # Once number is placed, call that same function again recursively, if it turns out that there are no options
 # for the next cell, it means that the previous cell was wrong, so we revert back and start over on the next iteration
 
-# Functions to impelement
+# Functions to implement
 
 # Our main function
 # def solve():
