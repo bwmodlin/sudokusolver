@@ -17,8 +17,7 @@ PROBLEM = [
     [5, 0, 7, 6, 0, 0, 0, 0, 3],
 ]
 
-
-# problem = [([0]* 9)*9]
+problem2 = np.zeros((9, 9)).tolist()
 
 
 def get_cost(matrix):
@@ -121,7 +120,7 @@ def switch_element(matrix, initial):
     return try_matrix
 
 
-def run_annealing(matrix):
+def run_annealing(matrix, tempset):
     initial = dc(matrix)
     set_initial_values(matrix)
     temperature = 4.2
@@ -129,7 +128,7 @@ def run_annealing(matrix):
 
     while True:
         if stuck > 5000:
-            temperature = 0.5
+            temperature = tempset
 
         try_case = switch_element(matrix, initial)
         try_cost = get_cost(try_case)
@@ -191,6 +190,30 @@ def print_board(matrix):
         print(rows_list[i])
 
 
+def run_test(n):
+    times5 = []
+    for i in range(n):
+        start_time = time.time()
+        run_annealing(dc(PROBLEM), 0.5)
+        times5.append(time.time() - start_time)
+
+    times10 = []
+    for i in range(n):
+        start_time = time.time()
+        run_annealing(dc(PROBLEM), 1.0)
+        times10.append(time.time() - start_time)
+
+    times20 = []
+    for i in range(n):
+        start_time = time.time()
+        run_annealing(dc(PROBLEM), 2.0)
+        times20.append(time.time() - start_time)
+
+    print(f"0.5 Average: {sum(times5) / len(times5)}")
+    print(f"1.0 Average: {sum(times10) / len(times10)}")
+    print(f"2.0 Average: {sum(times20) / len(times20)}")
+
+
 start_time = time.time()
-print_board(run_annealing(dc(PROBLEM)))
+print_board(run_annealing(PROBLEM, 1.0))
 print(time.time() - start_time)
