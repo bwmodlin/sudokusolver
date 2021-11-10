@@ -103,6 +103,31 @@ def switch_element(matrix, initial):
     try_matrix = dc(matrix)
     box_x = random.randint(0, 2)
     box_y = random.randint(0, 2)
+
+    possible_list = []
+    for i in range(3):
+        for j in range(3):
+            if initial[3*box_x + i][3 * box_y + j] == 0:
+                possible_list.append((i,j))
+
+    first_index = random.randint(0, len(possible_list)-1)
+    second_index = random.randint(0, len(possible_list)-1)
+    first_x = 3 * box_x + possible_list[first_index][0]
+    first_y = 3 * box_y + possible_list[first_index][1]
+    second_x = 3 * box_x + possible_list[second_index][0]
+    second_y = 3 * box_y + possible_list[second_index][0]
+
+    store_first = try_matrix[first_x][first_y]
+    try_matrix[first_x][first_y] = try_matrix[second_x][second_y]
+    try_matrix[second_x][second_y] = store_first
+
+    return try_matrix
+
+
+def switch_element_old(matrix, initial):
+    try_matrix = dc(matrix)
+    box_x = random.randint(0, 2)
+    box_y = random.randint(0, 2)
     while (True):
         first_x = 3 * box_x + random.randint(0, 2)
         first_y = 3 * box_y + random.randint(0, 2)
@@ -119,7 +144,6 @@ def switch_element(matrix, initial):
 
     return try_matrix
 
-
 def run_annealing(matrix, tempset):
     initial = dc(matrix)
     set_initial_values(matrix)
@@ -127,10 +151,12 @@ def run_annealing(matrix, tempset):
     stuck = 0
 
     while True:
-        if stuck > 5000:
+        if stuck > 3000:
             temperature = tempset
+            stuck = 0
+            tempset *= 2.5
 
-        try_case = switch_element(matrix, initial)
+        try_case = switch_element_old(matrix, initial)
         try_cost = get_cost(try_case)
         curr_cost = get_cost(matrix)
 
@@ -189,31 +215,9 @@ def print_board(matrix):
             print("-------------------------------------")
         print(rows_list[i])
 
-
-def run_test(n):
-    times5 = []
-    for i in range(n):
-        start_time = time.time()
-        run_annealing(dc(PROBLEM), 0.5)
-        times5.append(time.time() - start_time)
-
-    times10 = []
-    for i in range(n):
-        start_time = time.time()
-        run_annealing(dc(PROBLEM), 1.0)
-        times10.append(time.time() - start_time)
-
-    times20 = []
-    for i in range(n):
-        start_time = time.time()
-        run_annealing(dc(PROBLEM), 2.0)
-        times20.append(time.time() - start_time)
-
-    print(f"0.5 Average: {sum(times5) / len(times5)}")
-    print(f"1.0 Average: {sum(times10) / len(times10)}")
-    print(f"2.0 Average: {sum(times20) / len(times20)}")
-
-
 start_time = time.time()
-print_board(run_annealing(PROBLEM, 1.0))
-print(time.time() - start_time)
+print_board(run_annealing(dc(PROBLEM), 0.1))
+print(time.time()-start_time)
+
+
+
