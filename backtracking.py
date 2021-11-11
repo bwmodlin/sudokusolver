@@ -10,9 +10,9 @@
 import math
 import copy
 import random
-
-
-
+import time
+import matplotlib.pyplot as plt
+import statistics
 
 # Helper function to check if a number can be placed at board[row][col]
 def is_possible(board, row, col, num):
@@ -34,7 +34,7 @@ def is_possible(board, row, col, num):
 
 
 # Solves a sudoku board of size n x n, NOTE: n should be a perfect square
-def solve_the_game(board):
+def backtracking_solve(board):
     row = None
     col = None
 
@@ -54,7 +54,7 @@ def solve_the_game(board):
             board[row][col] = num
 
             # Recursively call the solve function again
-            if solve_the_game(board):
+            if backtracking_solve(board):
                 return True
 
             # If returned false, then the choice was wrong, reset
@@ -154,13 +154,104 @@ def generate_sudoku_board(n, p):
         return matrix
 
 
-PROBLEM = generate_sudoku_board(9, 1)
-print("UNSOLVED:")
-print_board(copy.deepcopy(PROBLEM))
+# Test 1: Constant board size but changing the number of clues
+# We will generate a 9x9 board and incrementing the percentage of blank cells on the board
+def percentage_test():
+    backtracking_runtime = []
+    percentage_of_empty = []
 
-if solve_the_game(PROBLEM):
-    print("")
-    print("SOLVED:")
-    print_board(PROBLEM)
-else:
-    print("No Solution")
+    # 1% to 99%
+    for percentage in range(1, 100, 2):
+
+        percentage_of_empty.append(percentage)
+        y = []
+
+        # 10 trials at each percent
+        for i in range(10):
+            print(percentage)
+            PROBLEM = generate_sudoku_board(9, percentage)
+
+            start = time.time()
+            backtracking_solve(PROBLEM)
+            end = time.time()
+
+            y.append(end - start)
+
+        # Taking the average of the ten trials
+        backtracking_runtime.append(statistics.median(y))
+
+    plt.plot(percentage_of_empty, backtracking_runtime)
+    plt.xlabel("Percentage Of Board That Are Empty Cells")
+    plt.ylabel("Solve Time (seconds)")
+    plt.title("Backtracking Runtime vs. Percentage Of Board That Are Empty Cells")
+    plt.show()
+
+# Test 2: Constant percentage of blanks on the board but changing the board size
+# We will generate 4x4, 9x9, and 16x16 boards with a constant 40% being empty
+def board_size_test():
+    # 4x4
+    four_trials = []
+    for i in range(10):
+        PROBLEM = generate_sudoku_board(4, 30)
+        start = time.time()
+        backtracking_solve(PROBLEM)
+        end = time.time()
+        four_trials.append(end - start)
+        print(i, "four")
+
+    four_by_four = statistics.median(four_trials)
+
+    # 9x9
+    nine_trials = []
+    for i in range(10):
+        PROBLEM = generate_sudoku_board(9, 30)
+        start = time.time()
+        backtracking_solve(PROBLEM)
+        end = time.time()
+        nine_trials.append(end - start)
+        print(i, "nine")
+
+    nine_by_nine = statistics.median(nine_trials)
+
+    # 16x16
+    sixteen_trials = []
+    for i in range(10):
+        PROBLEM = generate_sudoku_board(16, 30)
+        start = time.time()
+        backtracking_solve(PROBLEM)
+        end = time.time()
+        sixteen_trials.append(end - start)
+        print(i, "sixteen")
+
+    sixteen_by_sixteen = statistics.median(sixteen_trials)
+
+    labels = ["4x4", "9x9", "16x16"]
+    values = [four_by_four, nine_by_nine, sixteen_by_sixteen]
+
+    plt.bar(labels, values)
+    plt.ylabel("Time (s)")
+    plt.title("Backtracking Performance for Different Board Sizes at 30 Percent Unfilled")
+    plt.show()
+
+# Test 3, tests the best, average, and worst cases using 9x9 boards
+def runTime():
+    times = []
+    for i in range(1, 99):
+
+        PROBLEM = generate_sudoku_board(9, 30)
+        start_time = time.time()
+        backtracking_solve(PROBLEM)
+        times.append(time.time() - start_time)
+
+        print(i)
+
+    plt.ylabel("Time (s)")
+    plt.title("Cases for Backtracking Solving 9x9 Boards 30 Percent Unfilled")
+    plt.bar(["Best Case", "Average Case", "Worst Case"], [min(times), sum(times)/len(times), max(times)])
+    plt.show()
+
+board_size_test()
+
+
+
+
