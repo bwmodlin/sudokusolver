@@ -2,6 +2,7 @@ import random
 from copy import deepcopy as dc
 import numpy as np
 import time
+import math
 
 PROBLEM = [
     [1, 0, 0, 0, 0, 6, 3, 0, 8],
@@ -15,6 +16,18 @@ PROBLEM = [
     [6, 2, 9, 0, 0, 0, 0, 0, 0],
     [0, 4, 0, 0, 0, 7, 6, 0, 0],
     [5, 0, 7, 6, 0, 0, 0, 0, 3],
+]
+
+hard = [
+    [0, 6, 0, 0, 0, 0, 0, 1, 0],
+    [0, 5, 0, 0, 3, 0, 0, 7, 0],
+    [0, 2, 0, 5, 6, 0, 4, 0, 0],
+    [0, 0, 8, 0, 4, 0, 0, 9, 0],
+    [0, 0, 3, 0, 0, 9, 1, 0, 0],
+    [0, 0, 0, 1, 0, 6, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 3, 0, 0, 9, 0, 0, 0, 2],
+    [0, 0, 7, 0, 5, 0, 0, 4, 0]
 ]
 
 problem2 = np.zeros((9, 9)).tolist()
@@ -55,14 +68,16 @@ def get_cost(matrix):
 
 # only works for 9x9 at the moment
 def set_initial_values(matrix):
+    side = len(matrix[0])
+    sqrt = int(math.sqrt(side))
     def remove_values(i, j):
         possible_values = {}
-        for k in range(1, 10):
+        for k in range(1, side+1):
             possible_values[k] = True
 
-        for l in range(3):
-            for m in range(3):
-                val = matrix[3 * i + l][3 * j + m]
+        for l in range(sqrt):
+            for m in range(sqrt):
+                val = matrix[sqrt * i + l][sqrt * j + m]
                 if val == 0:
                     continue
                 elif possible_values[val]:
@@ -72,67 +87,31 @@ def set_initial_values(matrix):
 
     def set_values(i, j, possible_values):
         choice_array = [val for val in possible_values if possible_values[val]]
-        for l in range(3):
-            for m in range(3):
-                val = matrix[3 * i + l][3 * j + m]
+        for l in range(sqrt):
+            for m in range(sqrt):
+                val = matrix[sqrt * i + l][sqrt * j + m]
                 if val == 0:
                     choice = random.randint(0, len(choice_array) - 1)
-                    matrix[3 * i + l][3 * j + m] = choice_array[choice]
+                    matrix[sqrt * i + l][sqrt * j + m] = choice_array[choice]
                     choice_array.pop(choice)
 
-    for width in range(3):
-        for height in range(3):
+    for width in range(sqrt):
+        for height in range(sqrt):
             set_values(width, height, remove_values(width, height))
 
 
-# deprecated. Worse way to do case generation
-def get_new_matrix(matrix, initial):
-    try_matrix = dc(matrix)
-
-    box_x = random.randint(0, 2)
-    box_y = random.randint(0, 2)
-    for i in range(3):
-        for j in range(3):
-            try_matrix[3 * box_x + i][3 * box_y + j] = initial[3 * box_x + i][3 * box_y + j]
-
-    set_initial_values(try_matrix)
-    return try_matrix
-
-
 def switch_element(matrix, initial):
+    side = len(matrix[0])
+    sqrt = int(math.sqrt(side))
+
     try_matrix = dc(matrix)
-    box_x = random.randint(0, 2)
-    box_y = random.randint(0, 2)
-
-    possible_list = []
-    for i in range(3):
-        for j in range(3):
-            if initial[3*box_x + i][3 * box_y + j] == 0:
-                possible_list.append((i,j))
-
-    first_index = random.randint(0, len(possible_list)-1)
-    second_index = random.randint(0, len(possible_list)-1)
-    first_x = 3 * box_x + possible_list[first_index][0]
-    first_y = 3 * box_y + possible_list[first_index][1]
-    second_x = 3 * box_x + possible_list[second_index][0]
-    second_y = 3 * box_y + possible_list[second_index][0]
-
-    store_first = try_matrix[first_x][first_y]
-    try_matrix[first_x][first_y] = try_matrix[second_x][second_y]
-    try_matrix[second_x][second_y] = store_first
-
-    return try_matrix
-
-
-def switch_element_old(matrix, initial):
-    try_matrix = dc(matrix)
-    box_x = random.randint(0, 2)
-    box_y = random.randint(0, 2)
+    box_x = random.randint(0, sqrt-1)
+    box_y = random.randint(0, sqrt-1)
     while (True):
-        first_x = 3 * box_x + random.randint(0, 2)
-        first_y = 3 * box_y + random.randint(0, 2)
-        second_x = 3 * box_x + random.randint(0, 2)
-        second_y = 3 * box_y + random.randint(0, 2)
+        first_x = sqrt * box_x + random.randint(0, sqrt-1)
+        first_y = sqrt * box_y + random.randint(0, sqrt-1)
+        second_x = sqrt * box_x + random.randint(0, sqrt-1)
+        second_y = sqrt * box_y + random.randint(0, sqrt-1)
 
         if initial[first_x][first_y] == 0 and initial[second_x][second_y] == 0:
             store_first = try_matrix[first_x][first_y]
@@ -144,19 +123,27 @@ def switch_element_old(matrix, initial):
 
     return try_matrix
 
-def run_annealing(matrix, tempset):
+
+def run_annealing(matrix, tempset = 0.1):
+    temperature = get_std(matrix)
     initial = dc(matrix)
     set_initial_values(matrix)
-    temperature = 4.2
+    initial_temp = temperature
+    initial_tempset = tempset
+
     stuck = 0
 
     while True:
-        if stuck > 3000:
+        if stuck > 5000:
             temperature = tempset
+            if temperature > initial_temp:
+                temperature = initial_temp
+                tempset = initial_tempset
             stuck = 0
-            tempset *= 2.5
+            if tempset < 2:
+                tempset *= 2.0
 
-        try_case = switch_element_old(matrix, initial)
+        try_case = switch_element(matrix, initial)
         try_cost = get_cost(try_case)
         curr_cost = get_cost(matrix)
 
@@ -167,7 +154,7 @@ def run_annealing(matrix, tempset):
                 stuck += 1
             else:
                 stuck = 0
-            print(try_cost)
+
             matrix = try_case
             if try_cost == 0:
                 return matrix
@@ -181,7 +168,6 @@ def run_annealing(matrix, tempset):
                 else:
                     stuck = 0
 
-                print(try_cost)
                 matrix = try_case
                 if try_cost == 0:
                     return matrix
@@ -215,9 +201,23 @@ def print_board(matrix):
             print("-------------------------------------")
         print(rows_list[i])
 
-start_time = time.time()
-print_board(run_annealing(dc(PROBLEM), 0.1))
-print(time.time()-start_time)
 
+def test(n, matrix):
+    times = []
+    for i in range(n):
+        start_time = time.time()
+        run_annealing(dc(matrix), 0.1)
+        total_time = time.time() - start_time
+        print(f"Trial {i+1}: {total_time}")
+        times.append(total_time)
+
+    print(f"Average Time: {sum(times)/len(times)}")
+
+def one_test():
+    start_time = time.time()
+    print_board(run_annealing(dc(hard), 0.1))
+    print(time.time() - start_time)
+
+test(10, PROBLEM)
 
 
