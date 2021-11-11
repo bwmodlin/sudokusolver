@@ -8,8 +8,10 @@
 # how many clues we have in a 9x9 grid
 
 import math
-import random
 import copy
+import random
+
+
 
 
 # Helper function to check if a number can be placed at board[row][col]
@@ -61,6 +63,23 @@ def solve_the_game(board):
     # Backtrack
     return False
 
+
+# prints a matrix of size n x n where n is a perfect square
+def print_board(matrix):
+    rows_list = []
+    for i in range(len(matrix)):
+        rows_list.append(matrix[i])
+
+    for row in range(0, len(rows_list)):
+
+        for column in range(0, len(rows_list[row])):
+            if column % (int(math.sqrt(len(matrix))) + 1) == 0:
+                rows_list[row].insert(column, '|')
+
+    for i in range(len(rows_list)):
+        if i % int(math.sqrt(len(matrix))) == 0:
+            print("-------------------------------------")
+        print(rows_list[i])
 
 # Generates a sudoku board of size n x n,
 # p is the percentage of cells that we want to set to 0
@@ -135,27 +154,7 @@ def generate_sudoku_board(n, p):
         return matrix
 
 
-# prints a matrix of size n x n where n is a perfect square
-def print_board(matrix):
-    rows_list = []
-    for i in range(len(matrix)):
-        rows_list.append(matrix[i])
-
-    for row in range(0, len(rows_list)):
-
-        for column in range(0, len(rows_list[row])):
-            if column % (int(math.sqrt(len(matrix))) + 1) == 0:
-                rows_list[row].insert(column, '|')
-
-    for i in range(len(rows_list)):
-        if i % int(math.sqrt(len(matrix))) == 0:
-            print("-------------------------------------")
-        # if i == int(math.sqrt(len(matrix))) * 2:
-        #     print("-------------------------------------")
-        print(rows_list[i])
-
-
-PROBLEM = generate_sudoku_board(16, 30)
+PROBLEM = generate_sudoku_board(9, 1)
 print("UNSOLVED:")
 print_board(copy.deepcopy(PROBLEM))
 
