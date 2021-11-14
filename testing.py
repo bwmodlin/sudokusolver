@@ -133,4 +133,4 @@ def percent_test(type):
     plt.show()
 
 
-runTime()
+percent_test("backtracking")

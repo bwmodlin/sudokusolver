@@ -6,12 +6,12 @@
 
 # size of board
 # how many clues we have in a 9x9 grid
+import random
 
 from utilities import is_possible
 
-
 # Solves a sudoku board of size n x n, NOTE: n should be a perfect square
-def backtracking_solve(board):
+def backtracking_solve(board, display = False, game = None):
     row = None
     col = None
 
@@ -21,17 +21,26 @@ def backtracking_solve(board):
                 row = r
                 col = c
 
+    if display:
+        game.board = board
+        game.new_board(row=row, col=col)
+
     # If no empty spots were found, we are done and return True:
     if row is None and col is None:
         return True
 
-    for num in range(1, len(board) + 1):
+    choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    random.shuffle(choices)
+
+    for x in range(1, len(board) + 1):
+
+        num = choices.pop()
 
         if is_possible(board, row, col, num):
             board[row][col] = num
 
             # Recursively call the solve function again
-            if backtracking_solve(board):
+            if backtracking_solve(board, display=display, game=game):
                 return True
 
             # If returned false, then the choice was wrong, reset

@@ -3,7 +3,6 @@ from copy import deepcopy as dc
 import numpy as np
 import math
 
-
 def get_cost(matrix):
     total_cost = 0
     rows_list = []
@@ -117,7 +116,7 @@ def no_zeros(matrix):
     return nozeros
 
 
-def run_annealing(matrix, tempset=0.1):
+def run_annealing(matrix, tempset=0.1, display=False, game = None):
     temperature = get_std(matrix)
     initial = dc(matrix)
     set_initial_values(matrix)
@@ -130,6 +129,10 @@ def run_annealing(matrix, tempset=0.1):
         return matrix
 
     while True:
+        if display:
+            game.board = matrix
+            game.new_board()
+
         if stuck > (10000 / 9) * len(matrix[0]):
             temperature = tempset
             if temperature > initial_temp:
