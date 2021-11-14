@@ -62,10 +62,16 @@ class game:
         else:
             backtracking_solve(self.board, display=True, game=self)
 
-    def new_board(self, row, col):
+    def new_board(self, row=None, col=None, annealing=False):
         self.draw_background()
         self.draw_numbers()
         # Highlights the current selected cell
-        self.color_square(row, col)
+
+        if annealing:
+            self.color_square(row[0], col[0])
+            self.color_square(row[1], col[1])
+        else:
+            self.color_square(row, col)
+
         pg.display.flip()
         time.sleep(0.04)

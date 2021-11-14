@@ -71,7 +71,7 @@ def set_initial_values(matrix):
             set_values(width, height, remove_values(width, height))
 
 
-def switch_element(matrix, initial):
+def switch_element(matrix, initial, display=False):
     side = len(matrix[0])
     sqrt = int(math.sqrt(side))
 
@@ -100,6 +100,9 @@ def switch_element(matrix, initial):
             store_first = try_matrix[first_x][first_y]
             try_matrix[first_x][first_y] = try_matrix[second_x][second_y]
             try_matrix[second_x][second_y] = store_first
+
+            if display:
+                return (try_matrix, first_x, first_y, second_x, second_y)
             break
         else:
             continue
@@ -123,6 +126,11 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
     initial_temp = temperature
     initial_tempset = tempset
 
+    first_x = 0
+    first_y = 0
+    second_x = 0
+    second_y = 0
+
     stuck = 0
 
     if get_cost(matrix) == 0 and no_zeros(matrix):
@@ -131,7 +139,7 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
     while True:
         if display:
             game.board = matrix
-            game.new_board()
+            game.new_board(row=(first_x, first_y), col=(second_x, second_y), annealing=True)
 
         if stuck > (10000 / 9) * len(matrix[0]):
             temperature = tempset
@@ -141,8 +149,10 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
             stuck = 0
             if tempset < 2:
                 tempset *= 2.0
-
-        try_case = switch_element(matrix, initial)
+        if display:
+            try_case, first_x, first_y, second_x, second_y = switch_element(matrix, initial, display=True)
+        else:
+            try_case = switch_element(matrix, initial)
         try_cost = get_cost(try_case)
         curr_cost = get_cost(matrix)
 
