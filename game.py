@@ -62,6 +62,9 @@ class game:
         else:
             backtracking_solve(self.board, display=True, game=self)
 
+        while True:
+            pass
+
     def new_board(self, row=None, col=None, annealing=False):
         self.draw_background()
         self.draw_numbers()
