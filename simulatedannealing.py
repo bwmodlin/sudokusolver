@@ -126,10 +126,10 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
     initial_temp = temperature
     initial_tempset = tempset
 
-    first_x = 0
-    first_y = 0
-    second_x = 0
-    second_y = 0
+    first_x = None
+    first_y = None
+    second_x = None
+    second_y = None
 
     stuck = 0
 
@@ -139,7 +139,10 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
     while True:
         if display:
             game.board = matrix
-            game.new_board(row=(first_x, first_y), col=(second_x, second_y), annealing=True)
+            game.new_board(row=(first_x, second_x), col=(first_y, second_y), annealing=True)
+            try_case, first_x, first_y, second_x, second_y = switch_element(matrix, initial, display=True)
+        else:
+            try_case = switch_element(matrix, initial)
 
         if stuck > (10000 / 9) * len(matrix[0]):
             temperature = tempset
@@ -149,10 +152,6 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
             stuck = 0
             if tempset < 2:
                 tempset *= 2.0
-        if display:
-            try_case, first_x, first_y, second_x, second_y = switch_element(matrix, initial, display=True)
-        else:
-            try_case = switch_element(matrix, initial)
         try_cost = get_cost(try_case)
         curr_cost = get_cost(matrix)
 

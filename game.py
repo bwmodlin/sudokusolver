@@ -68,11 +68,13 @@ class game:
     def new_board(self, row=None, col=None, annealing=False):
         self.draw_background()
         self.draw_numbers()
+
         # Highlights the current selected cell
 
         if annealing:
-            self.color_square(row[0], col[0])
-            self.color_square(row[1], col[1])
+            if row[0] is not None and row[1] is not None and col[0] is not None and col[1] is not None:
+                self.color_square(row[0], col[0])
+                self.color_square(row[1], col[1])
         else:
             self.color_square(row, col)
 
