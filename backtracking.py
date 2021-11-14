@@ -6,6 +6,7 @@
 
 # size of board
 # how many clues we have in a 9x9 grid
+import random
 
 from utilities import is_possible
 
@@ -25,7 +26,12 @@ def backtracking_solve(board):
     if row is None and col is None:
         return True
 
-    for num in range(1, len(board) + 1):
+    choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    random.shuffle(choices)
+
+    for x in range(1, len(board) + 1):
+
+        num = choices.pop()
 
         if is_possible(board, row, col, num):
             board[row][col] = num

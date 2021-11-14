@@ -85,16 +85,12 @@ def generate_sudoku_board(n, p):
         if row is None and col is None:
             return True
 
-        buffer = {}
+        choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        random.shuffle(choices)
 
         for x in range(1, len(board) + 1):
 
-            num = None
-            while True:
-                num = random.randint(1, len(board))
-                if num not in buffer:
-                    buffer[num] = "used"
-                    break
+            num = choices.pop()
 
             if is_possible(board, row, col, num):
                 board[row][col] = num

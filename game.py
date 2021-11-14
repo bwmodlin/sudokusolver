@@ -1,3 +1,5 @@
+import random
+
 from utilities import generate_sudoku_board, is_possible
 import sys, pygame as pg
 import time
@@ -7,7 +9,7 @@ screen_size = 750, 750
 screen = pg.display.set_mode(screen_size)
 font = pg.font.SysFont(None, 40)
 
-board = generate_sudoku_board(9, 100)
+board = generate_sudoku_board(9, 60)
 
 
 def draw_background():
@@ -25,21 +27,24 @@ def draw_background():
 
 def draw_numbers():
     for row in range(len(board)):
-        offset = 38
+        offset = 46
         for column in range(len(board[row])):
-            # if board[row][column] == 0:
-            #     board[row][column] = ""
             output = board[row][column]
             n_text = font.render(str(output), True, pg.Color('black'))
             screen.blit(n_text, pg.Vector2((column * 80) + offset, (row * 80) + offset))
 
+def color_square(r, c):
+    for row in range(len(board)):
+        offset = 46
+        for column in range(len(board[row])):
+
+            output = board[row][column]
+            n_text = font.render(str(output), True, pg.Color('black'))
+            if row == r and column == c:
+                pg.draw.circle(screen, pg.Color("orange"), (pg.Vector2((column * 80) + 55, (row * 80) + 55)), 30)
+            screen.blit(n_text, pg.Vector2((column * 80) + offset, (row * 80) + offset))
 
 def backtracking_solve(board):
-    draw_background()
-    draw_numbers()
-    pg.display.flip()
-    time.sleep(0.1)
-
     row = None
     col = None
 
@@ -49,14 +54,27 @@ def backtracking_solve(board):
                 row = r
                 col = c
 
+    draw_background()
+    draw_numbers()
+    # Highlights the current selected cell
+    color_square(row, col)
+    time.sleep(0.04)
+    pg.display.flip()
+
     # If no empty spots were found, we are done and return True:
     if row is None and col is None:
         return True
 
-    for num in range(1, len(board) + 1):
+    choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    random.shuffle(choices)
+
+    for x in range(1, len(board) + 1):
+
+        num = choices.pop()
 
         if is_possible(board, row, col, num):
             board[row][col] = num
+
 
             # Recursively call the solve function again
 
