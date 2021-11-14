@@ -96,13 +96,13 @@ def switch_element(matrix, initial, display=False):
         second_x = sqrt * box_x + random.randint(0, sqrt - 1)
         second_y = sqrt * box_y + random.randint(0, sqrt - 1)
 
-        if initial[first_x][first_y] == 0 and initial[second_x][second_y] == 0:
+        if initial[first_x][first_y] == 0 and initial[second_x][second_y] == 0 and (first_x, first_y) != (second_x, second_y):
             store_first = try_matrix[first_x][first_y]
             try_matrix[first_x][first_y] = try_matrix[second_x][second_y]
             try_matrix[second_x][second_y] = store_first
 
             if display:
-                return (try_matrix, first_x, first_y, second_x, second_y)
+                return try_matrix, first_x, first_y, second_x, second_y
             break
         else:
             continue
