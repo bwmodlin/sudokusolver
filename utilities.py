@@ -1,5 +1,7 @@
 import math
 import random
+import pygame as pg
+import sys
 
 
 # Helper function to check if a number can be placed at board[row][col]
@@ -151,3 +153,20 @@ def print_board(matrix):
         if i % int(math.sqrt(len(matrix))) == 0:
             print("-------------------------------------")
         print(rows_list[i])
+
+def event_handling():
+    for event in pg.event.get():
+        if event.type == pg.QUIT: sys.exit()
+        if event.type == pg.MOUSEBUTTONDOWN:
+            start = False
+            while not start:
+                for e in pg.event.get():
+                    if e.type == pg.QUIT: sys.exit()
+                    if e.type == pg.MOUSEBUTTONDOWN:
+                        start = True
+                    if e.type == pg.KEYDOWN:
+                        if e.key == pg.K_ESCAPE or e.key == pg.K_q:
+                            sys.exit(0)
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_ESCAPE or event.key == pg.K_q:
+                sys.exit(0)
