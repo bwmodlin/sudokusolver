@@ -73,7 +73,6 @@ class game:
                     else:
                         backtracking_solve(self.board, display=True, game=self)
 
-
     # changes the board after a change is made by the algorithms
     def new_board(self, row=None, col=None, annealing=False):
         self.draw_background()

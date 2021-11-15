@@ -45,7 +45,6 @@ def backtracking_solve(board, display=False, game=None):
 
     # If no empty spots were found, we are done and return True:
     if row is None and col is None:
-        yield board
         return True
 
     choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
