@@ -1,13 +1,12 @@
 from backtracking import backtracking_solve
 from simulatedannealing import run_annealing
-from utilities import generate_sudoku_board
-from utilities import get_possibilities
+from utilities import generate_sudoku_board, get_possibilities
 from copy import deepcopy as dc
 import statistics
 import time
 import matplotlib.pyplot as plt
 
-
+# runs a test on different sizes of matrices
 def size_test():
     # 4x4
     four_trials = []
@@ -80,6 +79,8 @@ def size_test():
     plt.title("Performance for Different Board Sizes at 30 Percent Unfilled")
     plt.show()
 
+
+# finds the best, average,and case for each algorithm on 9x9 30 percent filled boards
 def runTime():
     times = []
     times2 = []
@@ -104,7 +105,7 @@ def runTime():
     plt.show()
 
 
-
+# tracks the performance of an algorithm based on the possibilities to fill in the board (increments by percent filled)
 def percent_test(type):
     percent = []
     times = []

@@ -1,16 +1,16 @@
-import random
-
-from utilities import generate_sudoku_board, is_possible
+from utilities import generate_sudoku_board
 import sys, pygame as pg
 import time
 from simulatedannealing import run_annealing
 from backtracking import backtracking_solve
 
 
+# This class creates an instance of the GUI visualizer for our algorithm
 class game:
-    def __init__(self, type, board=None):
+    def __init__(self, type, board=None, time=0.04):
+        # Initializes a new GUI
         pg.init()
-
+        self.time = time
         self.screen_size = 750, 750
         self.screen = pg.display.set_mode(self.screen_size)
         self.font = pg.font.SysFont(None, 40)
@@ -19,9 +19,10 @@ class game:
             self.board = generate_sudoku_board(9, 60)
         pg.display.flip()
 
+        # Starts an annealing or backtracking solve
         self.start_game(type)
 
-
+    # draws the lines on the screen
     def draw_background(self):
         self.screen.fill(pg.Color("white"))
         pg.draw.rect(self.screen, pg.Color("black"), pg.Rect(15, 15, 720, 720), 10)
@@ -34,6 +35,7 @@ class game:
                          line_width)
             i += 1
 
+    # draws the numbers on the screen
     def draw_numbers(self):
         for row in range(len(self.board)):
             offset = 46
@@ -42,6 +44,7 @@ class game:
                 n_text = self.font.render(str(output), True, pg.Color('black'))
                 self.screen.blit(n_text, pg.Vector2((column * 80) + offset, (row * 80) + offset))
 
+    # colors numbers at specific coordinates
     def color_square(self, r, c):
         for row in range(len(self.board)):
             offset = 46
@@ -54,6 +57,7 @@ class game:
                                    30)
                 self.screen.blit(n_text, pg.Vector2((column * 80) + offset, (row * 80) + offset))
 
+    # starts the visualizer with annealing or backtracking
     def start_game(self, type):
         for event in pg.event.get():
             if event.type == pg.QUIT: sys.exit()
@@ -65,12 +69,12 @@ class game:
         while True:
             pass
 
+    # changes the board after a change is made by the algorithms
     def new_board(self, row=None, col=None, annealing=False):
         self.draw_background()
         self.draw_numbers()
 
         # Highlights the current selected cell
-
         if annealing:
             if row[0] is not None and row[1] is not None and col[0] is not None and col[1] is not None:
                 self.color_square(row[0], col[0])
@@ -79,4 +83,4 @@ class game:
             self.color_square(row, col)
 
         pg.display.flip()
-        time.sleep(0.04)
+        time.sleep(self.time)

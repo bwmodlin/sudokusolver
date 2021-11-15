@@ -7,11 +7,10 @@
 # size of board
 # how many clues we have in a 9x9 grid
 import random
-
 from utilities import is_possible
 
 # Solves a sudoku board of size n x n, NOTE: n should be a perfect square
-def backtracking_solve(board, display = False, game = None):
+def backtracking_solve(board, display=False, game=None):
     row = None
     col = None
 
@@ -27,6 +26,7 @@ def backtracking_solve(board, display = False, game = None):
 
     # If no empty spots were found, we are done and return True:
     if row is None and col is None:
+        yield board
         return True
 
     choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]

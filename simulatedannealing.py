@@ -3,6 +3,8 @@ from copy import deepcopy as dc
 import numpy as np
 import math
 
+
+# gets the cost of a specific matrix. Counts the duplicates in the columns and rows (the boxes by definition have no duplicates)
 def get_cost(matrix):
     total_cost = 0
     rows_list = []
@@ -36,7 +38,7 @@ def get_cost(matrix):
     return total_cost
 
 
-# only works for 9x9 at the moment
+# sets all the zeros to random values (that are not duplicates inside each box)
 def set_initial_values(matrix):
     side = len(matrix[0])
     sqrt = int(math.sqrt(side))
@@ -71,6 +73,7 @@ def set_initial_values(matrix):
             set_values(width, height, remove_values(width, height))
 
 
+# switches two random elements in the same box
 def switch_element(matrix, initial, display=False):
     side = len(matrix[0])
     sqrt = int(math.sqrt(side))
@@ -96,7 +99,8 @@ def switch_element(matrix, initial, display=False):
         second_x = sqrt * box_x + random.randint(0, sqrt - 1)
         second_y = sqrt * box_y + random.randint(0, sqrt - 1)
 
-        if initial[first_x][first_y] == 0 and initial[second_x][second_y] == 0 and (first_x, first_y) != (second_x, second_y):
+        if initial[first_x][first_y] == 0 and initial[second_x][second_y] == 0 and (first_x, first_y) != (
+                second_x, second_y):
             store_first = try_matrix[first_x][first_y]
             try_matrix[first_x][first_y] = try_matrix[second_x][second_y]
             try_matrix[second_x][second_y] = store_first
@@ -110,6 +114,7 @@ def switch_element(matrix, initial, display=False):
     return try_matrix
 
 
+# determines if any zeros exist in a matrix
 def no_zeros(matrix):
     nozeros = True
     for i in range(len(matrix)):
@@ -119,18 +124,17 @@ def no_zeros(matrix):
     return nozeros
 
 
-def run_annealing(matrix, tempset=0.1, display=False, game = None):
-    temperature = get_std(matrix)
-    initial = dc(matrix)
-    set_initial_values(matrix)
+# runs the annealing experiment
+def run_annealing(matrix, tempset=0.1, display=False, game=None):
+    temperature = get_std(matrix)  # sets the initial temperature to the standard deviation of the cost
+    initial = dc(matrix)  # remembers the initial state so we don't switch the initial clues
+    set_initial_values(matrix)  # sets the zeros to random values
     initial_temp = temperature
     initial_tempset = tempset
 
-    first_x = None
-    first_y = None
-    second_x = None
-    second_y = None
+    first_x, first_y, second_x, second_y = None, None, None, None
 
+    # Keeps track of how long algorithm is stuck so we can increase the temperature if needed
     stuck = 0
 
     if get_cost(matrix) == 0 and no_zeros(matrix):
@@ -150,7 +154,7 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
                 temperature = initial_temp
                 tempset = initial_tempset
             stuck = 0
-            if tempset < 2:
+            if tempset < 2:  # we don't want the temperature getting to high or it will never think long enough
                 tempset *= 2.0
         try_cost = get_cost(try_case)
         curr_cost = get_cost(matrix)
@@ -168,6 +172,7 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
                 return matrix
             temperature *= 0.999
         else:
+            # equation to get the chance based on the delta cost
             chance = 1 / (1 + np.exp(delta_cost / temperature))
 
             if random.random() < chance:
@@ -184,6 +189,7 @@ def run_annealing(matrix, tempset=0.1, display=False, game = None):
                 stuck += 1
 
 
+# gets the standard deviation of the cost of the matrix to set the temperature
 def get_std(matrix):
     cost_list = []
     for i in range(1000):
@@ -192,4 +198,3 @@ def get_std(matrix):
         cost_list.append(get_cost(matrix_copy))
 
     return np.std(cost_list)
-

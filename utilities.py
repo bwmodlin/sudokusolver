@@ -21,6 +21,7 @@ def is_possible(board, row, col, num):
     return True
 
 
+# gets the possibilities for total unfilled squares in the matrix
 def get_possibilities(matrix):
     size = len(matrix[0])
     sqrt = int(math.sqrt(size))
