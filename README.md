@@ -5,14 +5,15 @@
 
 Sudoku is a popular logic-based number puzzle game. Given a 9x9 grid, the objective is to fill the grid with digits so that each row, each column, and each of the nine 3×3 subgrids or "squares" contain all of the digits from 1 to 9. For our project, we were particularly interested in the idea of how a computer would solve this game.  
 
-Using the two most common algorithms for solving Sudoku, backtracking and simulated annealing, we ran a number of experiments on both to test performance, efficiency, as well as how they would scale with board sizes other than 9x9.  
+Using the two most common algorithms for solving Sudoku, backtracking and simulated annealing, we implemented both and ran a number of experiments to test performance, efficiency, and how they would scale with board sizes other than 9x9.  
 
 Additionally, we also developed a simiple visualizer GUI to simulate the solving process of each algorithm.
 
 # Overview
 
-Briefly talk about each file and their uses (game.py, driver.py, backtracking.py, etc...)  
-**Mention Imports (pygame, matplotlib, etc...)**
+Our project can be split up into two components, the testing experiments and the GUI. ```backtracking.py``` and ```simulatedannealing.py``` contain the implementation of the corresponding algorithm. ```utilities.py``` contains helper functions used throughout other files such as generating random Sudoku boards or printing matrices in the terminal. ```testing.py``` is where all the experiments and data collections were performed. ```game.py``` contains the GUI implementation and ```driver.py``` starts the game.  
+
+A ```requirements.txt``` is provided for required import installations. You can also manually install the libraries yourself since there are only three: matplotlib, numpy, and pygame.
 
 
 # Our Tests
