@@ -110,8 +110,6 @@ def switch_element(matrix, initial, display=False):
             if display:
                 return try_matrix, first_x, first_y, second_x, second_y
             break
-        else:
-            continue
 
     return try_matrix
 
