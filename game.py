@@ -7,10 +7,10 @@ from backtracking import backtracking_solve
 
 # This class creates an instance of the GUI visualizer for our algorithm
 class game:
-    def __init__(self, type, board=None, time=0.04):
+    def __init__(self, type, board=None, stop=0.04):
         # Initializes a new GUI
         pg.init()
-        self.time = time
+        self.stop = stop
         self.screen_size = 750, 750
         self.screen = pg.display.set_mode(self.screen_size)
         self.font = pg.font.SysFont(None, 40)
@@ -53,6 +53,8 @@ class game:
             for column in range(len(self.board[row])):
 
                 output = self.board[row][column]
+                if output == 0:
+                    output = ""
                 n_text = self.font.render(str(output), True, pg.Color('black'))
                 if row == r and column == c:
                     pg.draw.circle(self.screen, pg.Color("orange"), (pg.Vector2((column * 80) + 55, (row * 80) + 55)),
@@ -90,4 +92,4 @@ class game:
                 self.color_square(row, col)
 
         pg.display.flip()
-        time.sleep(self.time)
+        time.sleep(self.stop)
