@@ -132,6 +132,3 @@ def percent_test(type):
     plt.title(f"{type.title()} 9x9 Board Solve Times by Board Possibilities")
     plt.semilogx(percent, times, ".")
     plt.show()
-
-
-percent_test("backtracking")
