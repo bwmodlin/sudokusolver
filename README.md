@@ -3,9 +3,11 @@
 
 # Intentions: 
 
-Talk briefly about the game of Sudoku and how we were interested in a solver.  
-Introduce Backtracking Algorithm and Simulated Annealing algorithms and how we are  
-going to compare them with experiments as well as building a GUI visualizer for each  
+Sudoku is a popular logic-based number puzzle game. Given a 9x9 grid, the objective is to fill the grid with digits so that each row, each column, and each of the nine 3×3 subgrids or "squares" contain all of the digits from 1 to 9. For our project, we were particularly interested in the idea of how a computer would solve this game.  
+
+Using the two most common algorithms for solving Sudoku, backtracking and simulated annealing, we ran a number of experiments on both to test performance, efficiency, as well as how they would scale with board sizes other than 9x9.  
+
+Additionally, we also developed a simiple visualizer GUI to simulate the solving process of each algorithm.
 
 # Overview
 
