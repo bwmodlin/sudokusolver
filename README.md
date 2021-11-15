@@ -33,5 +33,7 @@ Short sentence about what each graph shows and what we learned and if it was wha
 
 # How to Run GUI Simulation
 
-Step by step of how to run GUI and the tweakable settings
+To run the GUI, it is best to use the ```driver.py``` script. Creating a game object will create a window. The type parameter and the optional board and stop parameters can be passed ot the constructor for the game class. The type can either be "backtracking" or "annealing" corresponding to which algorithm you want to visualize. If no board parameter is provided, a random board will be generated to solve, but a 2d 9x9 array can be passed to solve a specific board. The stop parameter can be used to change the delay between each step to manipulate the speed of the visualization.
+
+When the visualizztion first starts, the initial unsolved board will be displayed. To start the visualization, simple left click. You can left click once again to pause/start the visuzliation at any time before the board is solved. Besides the exit button in the top left of the window, the esc and q keys can be used to close the window. 
 
