@@ -41,6 +41,8 @@ class game:
             offset = 46
             for column in range(len(self.board[row])):
                 output = self.board[row][column]
+                if output == 0:
+                    output = ""
                 n_text = self.font.render(str(output), True, pg.Color('black'))
                 self.screen.blit(n_text, pg.Vector2((column * 80) + offset, (row * 80) + offset))
 

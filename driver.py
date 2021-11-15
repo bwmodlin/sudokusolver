@@ -13,7 +13,7 @@ if __name__ == "__main__":
     game(type="backtracking", board=board)
 
     # Uncomment next line to solve the board (with annealing) and print out the results to the terminal
-    #print_board(run_annealing(board))
+    # print_board(run_annealing(board))
 
 
 
