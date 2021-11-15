@@ -2,6 +2,8 @@ import random
 from copy import deepcopy as dc
 import numpy as np
 import math
+import pygame as pg
+import sys
 
 
 # gets the cost of a specific matrix. Counts the duplicates in the columns and rows (the boxes by definition have no duplicates)
@@ -126,6 +128,7 @@ def no_zeros(matrix):
 
 # runs the annealing experiment
 def run_annealing(matrix, tempset=0.1, display=False, game=None):
+    print("nope")
     temperature = get_std(matrix)  # sets the initial temperature to the standard deviation of the cost
     initial = dc(matrix)  # remembers the initial state so we don't switch the initial clues
     set_initial_values(matrix)  # sets the zeros to random values
@@ -141,11 +144,29 @@ def run_annealing(matrix, tempset=0.1, display=False, game=None):
         return matrix
 
     while True:
+        # a bunch of event handlers for the GUI. Ignore if grading the algorithm
         if display:
+            for event in pg.event.get():
+                if event.type == pg.QUIT: sys.exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    start = False
+                    while not start:
+                        for e in pg.event.get():
+                            if e.type == pg.QUIT: sys.exit()
+                            if e.type == pg.MOUSEBUTTONDOWN:
+                                start = True
+                            if e.type == pg.KEYDOWN:
+                                if e.key == pg.K_ESCAPE or e.key == pg.K_q:
+                                    sys.exit(0)
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE or event.key == pg.K_q:
+                        sys.exit(0)
+
             game.board = matrix
             game.new_board(row=(first_x, second_x), col=(first_y, second_y), annealing=True)
             try_case, first_x, first_y, second_x, second_y = switch_element(matrix, initial, display=True)
         else:
+            # None gui part
             try_case = switch_element(matrix, initial)
 
         if stuck > (10000 / 9) * len(matrix[0]):

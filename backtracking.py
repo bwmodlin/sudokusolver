@@ -8,6 +8,9 @@
 # how many clues we have in a 9x9 grid
 import random
 from utilities import is_possible
+import sys
+import pygame as pg
+
 
 # Solves a sudoku board of size n x n, NOTE: n should be a perfect square
 def backtracking_solve(board, display=False, game=None):
@@ -20,7 +23,23 @@ def backtracking_solve(board, display=False, game=None):
                 row = r
                 col = c
 
+    # a bunch of event handlers for the GUI. Ignore if grading the algorithm
     if display:
+        for event in pg.event.get():
+            if event.type == pg.QUIT: sys.exit()
+            if event.type == pg.MOUSEBUTTONDOWN:
+                start = False
+                while not start:
+                    for e in pg.event.get():
+                        if e.type == pg.QUIT: sys.exit()
+                        if e.type == pg.MOUSEBUTTONDOWN:
+                            start = True
+                        if e.type == pg.KEYDOWN:
+                            if e.key == pg.K_ESCAPE or e.key == pg.K_q:
+                                sys.exit(0)
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE or event.key == pg.K_q:
+                    sys.exit(0)
         game.board = board
         game.new_board(row=row, col=col)
 

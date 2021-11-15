@@ -59,15 +59,20 @@ class game:
 
     # starts the visualizer with annealing or backtracking
     def start_game(self, type):
-        for event in pg.event.get():
-            if event.type == pg.QUIT: sys.exit()
-        if type == "annealing":
-            run_annealing(self.board, display=True, game=self)
-        else:
-            backtracking_solve(self.board, display=True, game=self)
 
         while True:
-            pass
+            self.new_board()
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE or event.key == pg.K_q:
+                        sys.exit(0)
+                if event.type == pg.QUIT: sys.exit()
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if type == "annealing":
+                        run_annealing(self.board, display=True, game=self)
+                    else:
+                        backtracking_solve(self.board, display=True, game=self)
+
 
     # changes the board after a change is made by the algorithms
     def new_board(self, row=None, col=None, annealing=False):
@@ -75,12 +80,13 @@ class game:
         self.draw_numbers()
 
         # Highlights the current selected cell
-        if annealing:
-            if row[0] is not None and row[1] is not None and col[0] is not None and col[1] is not None:
-                self.color_square(row[0], col[0])
-                self.color_square(row[1], col[1])
-        else:
-            self.color_square(row, col)
+        if row is not None and col is not None:
+            if annealing:
+                if row[0] is not None and row[1] is not None and col[0] is not None and col[1] is not None:
+                    self.color_square(row[0], col[0])
+                    self.color_square(row[1], col[1])
+            else:
+                self.color_square(row, col)
 
         pg.display.flip()
         time.sleep(self.time)
