@@ -29,14 +29,17 @@ For all the tests, we used a random board generator that solved a completely unf
 
 ## Experimental Results
 
+_Board Sizes Results_
 ![Sizes Graph](https://github.com/bwmodlin/sudokusolver/blob/master/results/boardsize.png)
 
 Both algorithms obviously performanced exponentially worse as the board size exponentially increased. The main takeaway from this test was that backtracking's 9x9 results were much closer to its 4x4 results as compared to the simulated annealing performance. An interesting test to pursue in the future would be to run the algorithms with larger boards, but with our current algorithms that would take a long time if not forever. 
 
+_Best, Average, and Worst Case Results_
 ![Cases Graph](https://github.com/bwmodlin/sudokusolver/blob/master/results/cases.png)
 
 Similar to our board size test, the average case for the backtracking algorithm was closer to its best case while the average case for simulated annealing was pretty much in the middle. 
 
+_Runtime versus Initial Possibilities Results_
 ![Annealing Possibilities Graph](https://github.com/bwmodlin/sudokusolver/blob/master/results/annealingpossibilities.png)
 
 ![Backtracking Possibilities Graph](https://github.com/bwmodlin/sudokusolver/blob/master/results/backtrackingpossibilities.png)
@@ -47,8 +50,7 @@ To conclude, the backtracking algorithm peformanced multiple orders of magnitude
 
 ## How to Run the Testing Experiments
 
-Step by step process on how to run experiments  
-Explain more in-depth about testing.py
+We ran all of experiments through the ```testing.py``` script. Some of them take a quite a lot of time to run, but we provided the script to see the code that generated the graphs. Each method in the file corresponds to one of the graphs we produced. 
 
 ## How to Run GUI Simulation
 
