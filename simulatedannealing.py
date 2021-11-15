@@ -128,7 +128,6 @@ def no_zeros(matrix):
 
 # runs the annealing experiment
 def run_annealing(matrix, tempset=0.1, display=False, game=None):
-    print("nope")
     temperature = get_std(matrix)  # sets the initial temperature to the standard deviation of the cost
     initial = dc(matrix)  # remembers the initial state so we don't switch the initial clues
     set_initial_values(matrix)  # sets the zeros to random values

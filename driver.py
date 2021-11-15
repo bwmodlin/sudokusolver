@@ -10,7 +10,7 @@ if __name__ == "__main__":
     board = generate_sudoku_board(9, 40)
 
     # Uncomment next line to run an annealing GUI game
-    game(type="annealing", board=board)
+    game(type="backtracking", board=board)
 
     # Uncomment next line to solve the board (with annealing) and print out the results to the terminal
     #print_board(run_annealing(board))
