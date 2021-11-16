@@ -1,5 +1,7 @@
 # Sudoku Solver
 
+https://github.com/bwmodlin/sudokusolver
+
 
 ## Intentions: 
 
