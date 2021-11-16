@@ -79,3 +79,4 @@ To run the GUI, it is best to use the ```driver.py``` script. Creating a game ob
 
 When the visualization first starts, the initial unsolved board will be displayed. To start the visualization, simply left click. You can left click once again to pause/start the visualization at any time before the board is solved. Besides the exit button in the top left of the window, the esc and q keys can be used to close the window. 
 
+![Simulation Gif](https://github.com/bwmodlin/sudokusolver/blob/master/results/visualize.gif)
