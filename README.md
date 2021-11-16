@@ -15,6 +15,18 @@ Our project can be split up into two components, the testing experiments and the
 
 A ```requirements.txt``` is provided for required import installations. You can also manually install the libraries yourself since there are only three: matplotlib, numpy, and pygame.
 
+## Our Algorithms
+
+### Backtracking
+
+### Simulated Annealing
+
+Simulated Annealing is a form of stochastic searching algorithm. It attempts to find the minima based on predefined 'cost' function. In the case of Sudoku, we can define cost as the number of duplicates in the rows, columns, and boxes. In our implementation of simulated annealing, we replaced the initially empty cells with numbers that could not be duplicates in any of the boxes. Therefore, we only needed to check for duplicates in the rows and columns.
+
+To find a new candidate 'state' at a different spot in the cost function, we switched two random cells in a random box. We then calculated the cost of the new state. The probability to accept the new state was given by (1 / 1 + e<sup>delta cost - T</sup>). The T in this equation is the 'temperature' the annealing is at. The temperature determines how likely the algorithm is to accept a new cost that is higher than the old one. If the delta cost is negative (meaning there is less duplicates in the new solution), it was always accept the new state. 
+
+100 new states are produced at each temperature, with the temperature being multiplied by 0.999 at each step in the while loop. If the while loop gets stuck at a local minima, the algorithm artificially increases the temperature higher and higher until it gets unstuck.
+
 ## Our Tests
 
 Besides testing our algorithms to verify their accuracy, we ran three tests to compare the algorithms based on different benchmarks. 
