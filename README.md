@@ -1,6 +1,6 @@
 # Sudoku Solver
 
-https://github.com/bwmodlin/sudokusolver
+https://github.com/bwmodlin/sudokusolver#sudoku-solver
 
 
 ## Intentions: 
