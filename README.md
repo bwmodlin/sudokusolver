@@ -19,6 +19,15 @@ A ```requirements.txt``` is provided for required import installations. You can 
 
 ### Backtracking
 
+Backtracking is considered a brute force method and utilizes depth-first search. In other words, it completely explores one branch to a possible solution first before moving on to another branch. Here are the basic steps taken for backtracking:  
+1. Find an empty cell. In the case of our implementation, we chose to start from the bottom of the board and work our way up
+2. Check to see if it is possible for a number from 1-9 to be placed in that cell according to Sudoku rules
+3. If so, the number is placed in the cell and the algorithm proceeds to the next empty cell with the same process
+4. If none of the 9 numbers are valid to be placed in a cell during the execution, the cell is left blank and the “backtracking” step occurs and reverts back to the previous cell and chooses a different number from 1-9  
+
+Essentially, backtracking tests out every potentially possible solution.
+
+
 ### Simulated Annealing
 
 Simulated Annealing is a form of stochastic searching algorithm. It attempts to find the minima based on predefined 'cost' function. In the case of Sudoku, we can define cost as the number of duplicates in the rows, columns, and boxes. In our implementation of simulated annealing, we replaced the initially empty cells with numbers that could not be duplicates in any of the boxes. Therefore, we only needed to check for duplicates in the rows and columns.
