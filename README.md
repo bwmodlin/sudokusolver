@@ -53,7 +53,7 @@ For all the tests, we used a random board generator that solved a completely unf
 _Board Sizes Results_
 ![Sizes Graph](https://github.com/bwmodlin/sudokusolver/blob/master/results/boardsize.png)
 
-Both algorithms obviously performed exponentially worse as the board size exponentially increased. The main takeaway from this test was that backtracking's 9x9 results were much closer to its 4x4 results as compared to the simulated annealing performance. An interesting test to pursue in the future would be to run the algorithms with larger boards, but with our current algorithms that would take a long time if not forever. 
+Both algorithms obviously performed exponentially worse as the board size exponentially increased. The main takeaway from this test was that backtracking and simulated annealing similarly scaled in performance for board size. An interesting test to pursue in the future would be to run the algorithms with larger boards, but with our current algorithms that would take a long time if not forever. 
 
 _Best, Average, and Worst Case Results_
 ![Cases Graph](https://github.com/bwmodlin/sudokusolver/blob/master/results/cases.png)
